@@ -1,0 +1,65 @@
+Типобезопасные перечисления в Java представляют собой
+классы и являются подклассами абстрактного класса Enum. При
+этом объекты перечисления инициализируются прямым объявлением без помощи
+оператора new. При инициализации хотя бы одного перечисления происходит
+инициализация всех без исключения оставшихся элементов данного перечисления.
+В качестве простейшего применения перечисления можно рассмотреть следующий код:
+
+package chapt02;
+enum Faculty {
+MMF, FPMI, GEO
+}
+public class SimpleUseEnum {
+public static void main(String args[]) {
+Faculty current;
+current = Faculty.GEO;
+switch (current) {
+ case GEO:
+System.out.print(current);
+break;
+ case MMF:
+System.out.print(current);
+break;
+// case LAW : System.out.print(current);//ошибка компиляции!
+ default:
+System.out.print("вне case: " + current);
+}
+}
+}
+
+В операторах case используются константы без уточнения типа перечисления, так как его тип определен в switch.
+Перечисление как подкласс класса Enum может содержать поля, конструкторы и методы, реализовывать интерфейсы. Каждый тип enum может использовать методы:
+static enumType[] values() – возвращает массив, содержащий все
+элементы перечисления в порядке их объявления;
+static T valueOf(Class<T> enumType, String arg) – возвращает элемент перечисления, соответствующий передаваемому типу и значению
+передаваемой строки;
+static enumType valueOf(String arg) – возвращает элемент перечисления, соответствующий значению передаваемой строки;
+int ordinal() – возвращает позицию элемента перечисления.
+
+package chapt02;
+enum Shape {
+RECTANGLE, TRIANGLE, CIRCLE;
+public double square(double x, double y) {
+switch (this) {
+case RECTANGLE:
+return x * y;
+case TRIANGLE:
+return x * y / 2;
+case CIRCLE:
+return Math.pow(x, 2) * Math.PI;
+}
+throw new EnumConstantNotPresentException(
+this.getDeclaringClass(),this.name());
+}
+}
+
+package chapt02;
+public class Runner {
+public static void main(String args[]) {
+double x = 2, y = 3;
+Shape[] arr = Shape.values();
+for (Shape sh : arr)
+System.out.printf("%10s = %5.2f%n",
+sh, sh.square(x, y));
+}
+}
